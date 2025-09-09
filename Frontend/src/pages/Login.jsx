@@ -17,7 +17,7 @@ const Login = ({ setUser }) => {
     console.log("Submitting login:", formData); // Debug
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await axios.post("http://localhost:5002/api/auth/login", formData);
       
       console.log("Response from backend:", res.data); // Debug
 
