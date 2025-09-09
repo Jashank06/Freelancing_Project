@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        PATH = "/usr/local/bin/docker-compose"
-        NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
-        PATH = "${NODEJS_HOME}:${env.PATH}"
-        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' 
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/freelancing_project'
-        DOCKER_TAG = "latest"
-    }
+    NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
+    DOCKER_BIN = '/usr/local/bin'
+    PATH = "${NODEJS_HOME}:${DOCKER_BIN}:${env.PATH}"
+    DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'
+    DOCKER_IMAGE_NAME = 'your-dockerhub-username/freelancing_project'
+    DOCKER_TAG = "latest"
+}
 
     stages {
 
