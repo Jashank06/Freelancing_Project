@@ -1,21 +1,23 @@
-# docker-compose.yml (updated)
+version: '3.8'
+
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
     ports:
       - "3002:80"
     depends_on:
       - backend
 
   backend:
-  build: ./backend
-  ports:
-    - "5003:5000"
-  environment:
-    - MONGODB_URI=mongodb://mongo:27017/mydatabase
-  depends_on:
-    - mongo
-
+    build:
+      context: ./backend
+    ports:
+      - "5003:5000"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo:6.0
