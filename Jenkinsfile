@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        PATH = "/usr/local/bin/docker-compose"
         NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
         PATH = "${NODEJS_HOME}:${env.PATH}"
         DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' 
