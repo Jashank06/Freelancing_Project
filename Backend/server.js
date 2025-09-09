@@ -27,14 +27,21 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+// CORS setup
+const defaultOrigins = ["http://localhost:3003"]; // frontend default
+const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || defaultOrigins;
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.get("/", (req, res) => res.send("API running..."));
-
-app.use("/api/bookings", bookingRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
