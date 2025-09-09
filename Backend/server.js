@@ -28,7 +28,7 @@ const app = express();
 app.use(express.json());
 
 // CORS setup
-const defaultOrigins = ["http://localhost:3003"]; // frontend default
+const defaultOrigins = ["http://localhost:3002"]; // frontend default
 const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || defaultOrigins;
 
 app.use(
