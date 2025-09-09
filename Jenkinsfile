@@ -6,7 +6,7 @@ pipeline {
         DOCKER_BIN = '/usr/local/bin'
         PATH = "${NODEJS_HOME}:${DOCKER_BIN}:${env.PATH}"
         DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'   // Jenkins me jo credentials ID di hai
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/freelancing_project'
+        DOCKER_IMAGE_NAME = 'jashank06/freelancing_project'
         DOCKER_TAG = "latest"
     }
 
