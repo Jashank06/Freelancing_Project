@@ -4,6 +4,9 @@ pipeline {
     environment {
         NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
         PATH = "${NODEJS_HOME}:${env.PATH}"
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' 
+        DOCKER_IMAGE_NAME = 'your-dockerhub-username/freelancing_project'
+        DOCKER_TAG = "latest"
     }
 
     stages {
@@ -34,19 +37,41 @@ pipeline {
         }
 
         stage('Archive Artifacts') {
-    steps {
-        archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: true, fingerprint: true
-    }
-}
+            steps {
+                archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: true, fingerprint: true
+            }
+        }
 
+        stage('Docker Compose Up') {
+            steps {
+                dir('.') {
+                    sh 'docker-compose down'
+                    sh 'docker-compose build'
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+
+        stage('Docker Push to Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                        docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                        docker logout
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Build Successful!'
+            echo 'Build, Docker Deployment & Push Successful!'
         }
         failure {
-            echo 'Build Failed!'
+            echo 'Build or Docker Deployment Failed!'
         }
     }
 }
