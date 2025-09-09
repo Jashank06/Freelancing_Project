@@ -34,10 +34,11 @@ pipeline {
         }
 
         stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'frontend/build/**', fingerprint: true
-            }
-        }
+    steps {
+        archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: true, fingerprint: true
+    }
+}
+
     }
 
     post {
