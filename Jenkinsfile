@@ -27,14 +27,15 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'npm install'
-                    sh 'npm run build'
+                    // Agar backend me build script ho, uncomment karna:
+                    // sh 'npm run build'
                 }
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/dist/**', fingerprint: true
+                archiveArtifacts artifacts: 'frontend/build/**', fingerprint: true
             }
         }
     }
