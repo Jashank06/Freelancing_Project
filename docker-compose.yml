@@ -8,13 +8,14 @@ services:
       - backend
 
   backend:
-    build: ./backend
-    ports:
-      - "5002:5000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/mydatabase
-    depends_on:
-      - mongo
+  build: ./backend
+  ports:
+    - "5003:5000"
+  environment:
+    - MONGODB_URI=mongodb://mongo:27017/mydatabase
+  depends_on:
+    - mongo
+
 
   mongo:
     image: mongo:6.0
