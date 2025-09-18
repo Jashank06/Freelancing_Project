@@ -8,7 +8,7 @@ import facialImg from "../assets/images/facial.png";
 import spaImg from "../assets/images/Hair_spa.png";
 import waxingImg from "../assets/images/waxing.png";
 import nailImg from "../assets/images/nail.png";
-import threadingImg from "../assets/images/threading.png";
+// import threadingImg from "../assets/images/threading.png";
 
 const Services = () => {
   const [isVisible, setIsVisible] = useState(false);
