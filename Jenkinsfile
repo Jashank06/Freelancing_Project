@@ -22,8 +22,6 @@ pipeline {
                 dir('frontend') {
                     sh 'npm install'
                     sh 'npm run build'
-                    // Debug: confirm build folder exists
-                    sh 'ls -R build'
                 }
             }
         }
@@ -40,8 +38,9 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                // Correct relative path to build folder
-                archiveArtifacts artifacts: 'frontend/build/**/*', allowEmptyArchive: false, fingerprint: true
+                dir('frontend') {
+                    archiveArtifacts artifacts: 'build/**', allowEmptyArchive: false, fingerprint: true
+                }
             }
         }
 
@@ -58,14 +57,14 @@ pipeline {
         stage('Docker Build & Push to Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    dir('.') {
-                        sh """
-                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                            docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
-                            docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
-                            docker logout
-                        """
-                    }
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ./backend
+                        docker build -t ${DOCKER_IMAGE_NAME}-frontend:${DOCKER_TAG} ./frontend
+                        docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                        docker push ${DOCKER_IMAGE_NAME}-frontend:${DOCKER_TAG}
+                        docker logout
+                    """
                 }
             }
         }
