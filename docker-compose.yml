@@ -12,13 +12,28 @@ services:
       - backend
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     ports:
       - "5003:5003"
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mydatabase
+      PORT: 5003
+      MONGODB_URI: "mongodb+srv://jaykumar0305:Jashank123@cluster0.cqx5wb6.mongodb.net/"
+      CORS_ORIGIN: "http://localhost:3000,http://localhost:3003"
+      JWT_SECRET: "1f0c9a2b7d6f4c998adbc64e213ff7a55ef0c40b1fba8715f6b9d8d43a223e9b"
+      ACCESS_TOKEN_SECRET: "38e4c1a5e6d24bb28d9c5f3a4c80f43d98f4c2e7adfcb17a7b5f94b9e1c2a7e6"
+      REFRESH_TOKEN_SECRET: "8f39c4a6f89c5b28e3a6d7b9f1e4c2a987d4b5c3e2f1a6b9c8d7e3f9a5c1b4d7"
+      ACCESS_TOKEN_EXPIRY: "15m"
+      REFRESH_TOKEN_EXPIRY: "7d"
+      EMAIL_USER: "jay440470@gmail.com"
+      EMAIL_PASS: "qrtazztxcgbooqo"
     depends_on:
       - mongo
+    restart: unless-stopped
 
   mongo:
     image: mongo:6.0
@@ -26,6 +41,7 @@ services:
       - "27019:27017"
     volumes:
       - mongo-data:/data/db
+    restart: unless-stopped
 
 volumes:
   mongo-data:
