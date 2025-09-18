@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // PATH = "/usr/local/bin/docker-compose"
         NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
         PATH = "${NODEJS_HOME}:${env.PATH}"
-        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' // Jenkins me jo ID credentials ke liye hai
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'
         DOCKER_IMAGE_NAME = 'your-dockerhub-username/freelancing_project'
         DOCKER_TAG = "latest"
     }
@@ -39,7 +38,8 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: true, fingerprint: true
+                // Artifact path fix: case-sensitive Jenkins me frontend/build
+                archiveArtifacts artifacts: 'frontend/build/**', allowEmptyArchive: false, fingerprint: true
             }
         }
 
@@ -53,13 +53,20 @@ pipeline {
             }
         }
 
-        stage('Docker Push to Hub') {
+        stage('Docker Build & Push to Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
-                        docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+
+                        # Backend Docker build & push
+                        docker build -t ${DOCKER_IMAGE_NAME}-backend:${DOCKER_TAG} ./backend
+                        docker push ${DOCKER_IMAGE_NAME}-backend:${DOCKER_TAG}
+
+                        # Frontend Docker build & push
+                        docker build -t ${DOCKER_IMAGE_NAME}-frontend:${DOCKER_TAG} ./frontend
+                        docker push ${DOCKER_IMAGE_NAME}-frontend:${DOCKER_TAG}
+
                         docker logout
                     """
                 }
@@ -69,10 +76,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build, Docker Deployment & Push Successful!'
+            echo '✅ Build, Docker Deployment & Push Successful!'
         }
         failure {
-            echo 'Build or Docker Deployment Failed!'
+            echo '❌ Build or Docker Deployment Failed!'
         }
     }
 }
