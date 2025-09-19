@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-// Use env variable directly like in Login.jsx
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL; // Docker container ke liye
 
 const Signup = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -21,28 +20,32 @@ const Signup = () => {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setStep(2);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/send-otp`, { email: formData.email });
+      const res = await axios.post(`${API_BASE_URL}/send-otp`, {
+        email: formData.email,
+      });
       console.log("OTP sent response:", res.data);
       setMessage("✅ OTP sent to your email!");
+      setStep(2);
     } catch (err) {
       console.error("Axios error object:", err);
-      setStep(1);
       setMessage(err.response?.data?.message || "❌ Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
 
-  // Step 2: Verify OTP and create user
+  // Step 2: Verify OTP & Register
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth/verify-otp`, { ...formData, otp });
+      const res = await axios.post(`${API_BASE_URL}/verify-otp`, {
+        ...formData,
+        otp,
+      });
       console.log("OTP verification response:", res.data);
       setMessage("🎉 Signup successful! Please login.");
       navigate("/login");
@@ -58,6 +61,7 @@ const Signup = () => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-secondary to-secondary/95">
       <div className="bg-black p-8 rounded-2xl shadow-xl border border-pink-500/30 w-96 transition-all">
         <h2 className="text-3xl font-bold text-pink-500 mb-6 text-center">Signup</h2>
+
         {message && (
           <p
             className={`mb-4 text-center ${
