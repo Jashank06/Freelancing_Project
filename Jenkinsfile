@@ -33,21 +33,9 @@ pipeline {
         stage('Backend Build') {
             steps {
                 dir('backend') {
-                    withCredentials([
-                        string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
-                        string(credentialsId: 'mongo-uri', variable: 'MONGO_URI'),
-                        usernamePassword(credentialsId: 'gmail-creds', usernameVariable: 'EMAIL_USER', passwordVariable: 'EMAIL_PASS')
-                    ]) {
-                        sh 'npm install'
-                        // .env generate karna
-                        sh '''
-                            echo "PORT=5003" > .env
-                            echo "MONGO_URI=$MONGO_URI" >> .env
-                            echo "JWT_SECRET=$JWT_SECRET" >> .env
-                            echo "EMAIL_USER=$EMAIL_USER" >> .env
-                            echo "EMAIL_PASS=$EMAIL_PASS" >> .env
-                        '''
-                    }
+                    sh 'npm install'
+                    // Agar backend me build script ho, uncomment karna:
+                    // sh 'npm run build'
                 }
             }
         }
