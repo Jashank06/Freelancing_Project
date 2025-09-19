@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'jashank06/freelancing_project'
         DOCKER_TAG = "latest"
 
-        REACT_APP_API_URL = "http://localhost:5003/api/auth"
+        REACT_APP_API_URL = "http://localhost:5003/api"
     }
 
     stages {
