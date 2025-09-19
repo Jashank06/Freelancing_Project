@@ -22,7 +22,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/send-otp`, {
+      const res = await axios.post(`${API_BASE_URL}/auth/send-otp`, {
         email: formData.email,
       });
       console.log("OTP sent response:", res.data);
@@ -42,7 +42,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/verify-otp`, {
+      const res = await axios.post(`${API_BASE_URL}/auth/verify-otp`, {
         ...formData,
         otp,
       });
