@@ -4,9 +4,13 @@ pipeline {
     environment {
         NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
         PATH = "${NODEJS_HOME}:${env.PATH}"
+
         DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' // Jenkins me jo ID credentials ke liye hai
         DOCKER_IMAGE_NAME = 'jashank06/freelancing_project'
         DOCKER_TAG = "latest"
+
+        # Frontend ENV
+        REACT_APP_API_URL = "http://localhost:5003/api/auth"
     }
 
     stages {
@@ -21,7 +25,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'npm install'
-                    sh 'npm run build'
+                    // REACT_APP_API_URL inject karna
+                    sh "REACT_APP_API_URL=${REACT_APP_API_URL} npm run build"
                 }
             }
         }
@@ -29,9 +34,21 @@ pipeline {
         stage('Backend Build') {
             steps {
                 dir('backend') {
-                    sh 'npm install'
-                    // Agar backend me build script ho, uncomment karna:
-                    // sh 'npm run build'
+                    withCredentials([
+                        string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
+                        string(credentialsId: 'mongo-uri', variable: 'MONGO_URI'),
+                        usernamePassword(credentialsId: 'gmail-creds', usernameVariable: 'EMAIL_USER', passwordVariable: 'EMAIL_PASS')
+                    ]) {
+                        sh 'npm install'
+                        // .env generate karna
+                        sh '''
+                            echo "PORT=5003" > .env
+                            echo "MONGO_URI=$MONGO_URI" >> .env
+                            echo "JWT_SECRET=$JWT_SECRET" >> .env
+                            echo "EMAIL_USER=$EMAIL_USER" >> .env
+                            echo "EMAIL_PASS=$EMAIL_PASS" >> .env
+                        '''
+                    }
                 }
             }
         }
@@ -47,7 +64,7 @@ pipeline {
         stage('Docker Compose Up') {
             steps {
                 dir('.') {
-                    sh 'docker-compose down'
+                    sh 'docker-compose down || true'
                     sh 'docker-compose build'
                     sh 'docker-compose up -d'
                 }
