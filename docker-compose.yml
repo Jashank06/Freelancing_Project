@@ -30,7 +30,7 @@ services:
       ACCESS_TOKEN_EXPIRY: "15m"
       REFRESH_TOKEN_EXPIRY: "7d"
       EMAIL_USER: "jay440470@gmail.com"
-      EMAIL_PASS: "qrtazztxcgbooqo"
+      EMAIL_PASS: "bqrt azzt xcgb ooqo"
     depends_on:
       - mongo
     restart: unless-stopped
