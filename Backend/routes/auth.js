@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import User from "../models/User.js";
+import authMiddleware from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -122,6 +123,104 @@ router.post("/login", async (req, res) => {
       token,
       user: { id: user._id, name: user.name, email: user.email },
     });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ==================== PROFILE ROUTES ====================
+
+// Get User Profile
+router.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    console.log('Profile request - User ID:', req.user.id);
+    const user = await User.findById(req.user.id).select("-password");
+    console.log('Found user:', user ? 'Yes' : 'No');
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.json({ user });
+  } catch (err) {
+    console.error('Profile fetch error:', err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Update User Profile
+router.put("/profile", authMiddleware, async (req, res) => {
+  try {
+    const {
+      name,
+      phone,
+      address,
+      city,
+      state,
+      pincode,
+      dateOfBirth,
+      gender,
+      profilePicture
+    } = req.body;
+
+    // Find user and update
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update fields if provided
+    if (name) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+    if (address !== undefined) user.address = address;
+    if (city !== undefined) user.city = city;
+    if (state !== undefined) user.state = state;
+    if (pincode !== undefined) user.pincode = pincode;
+    if (dateOfBirth !== undefined) user.dateOfBirth = dateOfBirth;
+    if (gender !== undefined) user.gender = gender;
+    if (profilePicture !== undefined) user.profilePicture = profilePicture;
+
+    await user.save();
+
+    // Return updated user without password
+    const updatedUser = await User.findById(req.user.id).select("-password");
+    res.json({ 
+      message: "Profile updated successfully",
+      user: updatedUser 
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Change Password
+router.put("/change-password", authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Current password and new password are required" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    // Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });

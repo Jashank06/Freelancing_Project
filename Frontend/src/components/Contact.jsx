@@ -1,6 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Pop-up message
+    alert("✅ Message Sent Successfully!");
+    // Clear form
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: ""
+    });
+  };
+
   return (
     <section id="contact" className="py-20 bg-secondary">
       <div className="container mx-auto px-6">
@@ -15,15 +42,18 @@ const Contact = () => {
         </div>
         
         <div className="max-w-4xl mx-auto bg-secondary/90 p-8 rounded-lg shadow-lg border border-gray-800">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-white mb-2">Name</label>
                 <input 
                   type="text" 
                   id="name" 
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Your Name"
+                  required
                 />
               </div>
               <div>
@@ -31,8 +61,11 @@ const Contact = () => {
                 <input 
                   type="email" 
                   id="email" 
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                   placeholder="Your Email"
+                  required
                 />
               </div>
             </div>
@@ -42,8 +75,11 @@ const Contact = () => {
               <input 
                 type="text" 
                 id="subject" 
+                value={formData.subject}
+                onChange={handleChange}
                 className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="Subject"
+                required
               />
             </div>
             
@@ -52,8 +88,11 @@ const Contact = () => {
               <textarea 
                 id="message" 
                 rows="5" 
+                value={formData.message}
+                onChange={handleChange}
                 className="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="Your Message"
+                required
               ></textarea>
             </div>
             

@@ -12,6 +12,8 @@ import Contact from './components/Contact';
 import ServiceDetail from './pages/ServiceDetail';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import AuthPage from './pages/AuthPage';
+import Profile from './pages/Profile';
 import { CartProvider } from "./context/CartContext";
 
 // Home Page Component
@@ -51,6 +53,8 @@ function App() {
         <Route path="/service/:serviceName" element={<ServiceDetail />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
+        <Route path="/auth" element={<AuthPage setUser={setUser} />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       </CartProvider>
     </Router>

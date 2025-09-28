@@ -27,21 +27,42 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// CORS setup
-const defaultOrigins = ["http://localhost:3003"]; // frontend default
+// ===================== CORS SETUP =====================
+const defaultOrigins = ["http://localhost:3000", "http://localhost:3003"];
 const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || defaultOrigins;
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // curl, Postman
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("CORS policy does not allow access from this origin."), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// ===================== ROUTES =====================
 app.use("/api/auth", authRoutes);
+app.use("/api/user", authRoutes); // Profile routes accessible via /api/user
 app.use("/api/bookings", bookingRoutes);
 
+// Root route
 app.get("/", (req, res) => res.send("API running..."));
 
+// Test endpoint
+app.get("/api/test", (req, res) => {
+  res.json({ 
+    message: "Backend is working!", 
+    timestamp: new Date().toISOString(),
+    port: PORT 
+  });
+});
+
+// ===================== SERVER =====================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

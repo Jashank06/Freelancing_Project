@@ -13,40 +13,40 @@ const Packages = () => {
     {
       id: 1,
       title: "Basic Package",
-      price: "₹1000",
+      price: "₹1199",
       features: [
-        { text: "Hair Styling", icon: "💇‍♀️" },
-        { text: "Makeup", icon: "💄" },
-        { text: "Facial", icon: "✨" },
-        { text: "Waxing", icon: "🕯️" },
-        { text: "Threading", icon: "🧵" },
-        { text: "Nail Extension", icon: "💅" },
+        // { text: "Hair Styling", icon: "💇‍♀️" },
+        { text: "All Thread work", icon: "💄" },
+        { text: "Facial (Any type with bleach)", icon: "✨" },
+        { text: "Manicure", icon: "🕯️" },
+        { text: "Pedicure", icon: "🧵" },
+        // { text: "Nail Extension", icon: "💅" },
       ],
       ribbon: "Starter",
     },
     {
       id: 2,
       title: "Premium Package",
-      price: "₹2200",
+      price: "₹1799",
       features: [
-        { text: "All Basic Services", icon: "🌸" },
+        { text: "Facial (Any one... O3 , Lotus , De-tan)", icon: "🌸" },
         { text: "Hair Spa", icon: "🧖‍♀️", highlight: true },
-        { text: "Advanced Makeup", icon: "💋" },
-        { text: "Luxury Manicure", icon: "💎" },
-        { text: "Full Body Waxing", icon: "🪄" },
+        { text: "All Thread work", icon: "💋" },
+        { text: "Nail Extension", icon: "💎" },
+        // { text: "Full Body Waxing", icon: "🪄" },
       ],
-      ribbon: "Most Popular",
+      ribbon: " 10% OFF Most Popular",
     },
     {
       id: 3,
       title: "Luxury Package",
-      price: "₹3500",
+      price: "₹2999",
       features: [
-        { text: "All Premium Services", icon: "🌺" },
+        { text: "HairStyle", icon: "🌺" },
         { text: "Hydra Facial", icon: "💧", highlight: true },
-        { text: "Bridal Makeup", icon: "👰" },
-        { text: "Deluxe Hair Treatment", icon: "🌟" },
-        { text: "Luxury Manicure", icon: "🪷" },
+        { text: "Full Body Waxing", icon: "👰" },
+        { text: "Party Makeup", icon: "🌟" },
+        { text: "All Thread Work", icon: "🪷" },
       ],
       ribbon: "Best Value",
       highlight: true,
@@ -74,7 +74,7 @@ const Packages = () => {
 
     try {
       await axios.post(
-        "http://localhost:5003/api/bookings", // ✅ Backend port
+        `${process.env.REACT_APP_API_URL}/bookings`, // ✅ Backend port
         {
           services: [
             {
