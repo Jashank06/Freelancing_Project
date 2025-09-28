@@ -12,8 +12,6 @@ import Particles from './Particles';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [scrollPosition, setScrollPosition] = useState(0);
   const heroRef = useRef(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -47,20 +45,6 @@ const Hero = () => {
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
 
-    const handleMouseMove = (e) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        setMousePosition({ x, y });
-      }
-    };
-
-    const handleScroll = () => setScrollPosition(window.scrollY);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
-
     const interval = setInterval(() => {
       setCurrentCardIndex((prev) => (prev + 1) % heroContents.length);
     }, 5000);
@@ -68,10 +52,8 @@ const Hero = () => {
     return () => {
       clearTimeout(timer);
       clearInterval(interval);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [heroContents.length]);
 
   const cardImages = [cardImage1, cardImage2, cardImage3];
 

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
 import { gsap } from 'gsap';
 import { GoArrowUpRight } from 'react-icons/go';
 import { HashLink as Link } from 'react-router-hash-link';
@@ -24,7 +25,7 @@ const CardNav = ({
   const cardsRef = useRef([]);
   const tlRef = useRef(null);
 
-  const calculateHeight = () => {
+  const calculateHeight = useCallback(() => {
     const navEl = navRef.current;
     if (!navEl) return 260;
 
@@ -55,9 +56,9 @@ const CardNav = ({
       }
     }
     return 260;
-  };
+  }, []);
 
-  const createTimeline = () => {
+  const createTimeline = useCallback(() => {
     const navEl = navRef.current;
     if (!navEl) return null;
 
@@ -69,7 +70,7 @@ const CardNav = ({
     tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
 
     return tl;
-  };
+  }, [ease, calculateHeight]);
 
   useLayoutEffect(() => {
     const tl = createTimeline();
@@ -78,7 +79,7 @@ const CardNav = ({
       tl?.kill();
       tlRef.current = null;
     };
-  }, [ease, items]);
+  }, [createTimeline]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -97,7 +98,7 @@ const CardNav = ({
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isExpanded]);
+  }, [isExpanded, calculateHeight, createTimeline]);
 
   const toggleMenu = () => {
     const tl = tlRef.current;

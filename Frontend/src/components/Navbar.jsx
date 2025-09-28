@@ -1,18 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import CardNav from "./CardNav";
 import logo from "../assets/images/mlogo.png";
 
 const Navbar = ({ user, setUser }) => {
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    navigate("/auth");
-    setIsProfileMenuOpen(false);
-  };
 
   const items = [
     {

@@ -59,13 +59,13 @@ const AuthPage = ({ setUser }) => {
     setLoading(true);
 
     try {
-      const res = await axios.post(
+      const { data } = await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/login`,
         loginData
       );
 
-      localStorage.setItem("token", res.data.token);
-      setUser(res.data.user);
+      if (data?.token) localStorage.setItem("token", data.token);
+      if (data?.user) setUser(data.user);
       setLoginData({ email: "", password: "" });
       navigate("/");
     } catch (err) {
@@ -92,7 +92,7 @@ const AuthPage = ({ setUser }) => {
     setError("");
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/send-otp`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/send-otp`, {
         email: signupData.email,
       });
       setMessage("OTP sent to your email!");
@@ -110,7 +110,7 @@ const AuthPage = ({ setUser }) => {
     setError("");
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/verify-otp`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/verify-otp`, {
         ...signupData,
         otp,
       });
@@ -173,7 +173,7 @@ const AuthPage = ({ setUser }) => {
             </button>
 
             <div className="regi-link animation" style={{'--S': 4, '--D': 17}}>
-              <p>Don't have an account? <a href="#" className="SignUpLink" onClick={(e) => {e.preventDefault(); setIsActive(true); setError(""); setMessage("");}}>Sign Up</a></p>
+              <p>Don't have an account? <button type="button" className="SignUpLink" onClick={(e) => { setIsActive(true); setError(""); setMessage(""); }}>Sign Up</button></p>
             </div>
           </form>
         </div>
@@ -247,7 +247,7 @@ const AuthPage = ({ setUser }) => {
               </button>
 
               <div className="regi-link animation" style={{'--li': 12, '--S': 5}}>
-                <p>Already have an account? <a href="#" className="SignInLink" onClick={(e) => {e.preventDefault(); setIsActive(false); setError(""); setMessage(""); setStep(1);}}>Sign In</a></p>
+                <p>Already have an account? <button type="button" className="SignInLink" onClick={() => { setIsActive(false); setError(""); setMessage(""); setStep(1); }}>Sign In</button></p>
               </div>
             </form>
           ) : (
@@ -297,7 +297,7 @@ const AuthPage = ({ setUser }) => {
               </button>
 
               <div className="regi-link animation" style={{'--li': 12, '--S': 5}}>
-                <p>Already have an account? <a href="#" className="SignInLink" onClick={(e) => {e.preventDefault(); setIsActive(false); setError(""); setMessage(""); setStep(1);}}>Sign In</a></p>
+                <p>Already have an account? <button type="button" className="SignInLink" onClick={() => { setIsActive(false); setError(""); setMessage(""); setStep(1); }}>Sign In</button></p>
               </div>
             </form>
           )}
