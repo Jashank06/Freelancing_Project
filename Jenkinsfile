@@ -5,7 +5,7 @@ pipeline {
         NODEJS_HOME = '/Users/mac/.nvm/versions/node/v22.11.0/bin'
         PATH = "${NODEJS_HOME}:${env.PATH}"
 
-        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds' // Jenkins me jo ID credentials ke liye hai
+        DOCKER_HUB_CREDENTIALS = 'dockerhub' // Jenkins me jo ID credentials ke liye hai
         DOCKER_IMAGE_NAME = 'jashank06/freelancing_project'
         DOCKER_TAG = "latest"
 
