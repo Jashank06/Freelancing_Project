@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.802a9eba.css",
+    "main.js": "/static/js/main.bf820726.js",
+    "static/js/453.cbb5907b.chunk.js": "/static/js/453.cbb5907b.chunk.js",
+    "static/media/Hair_spa.png": "/static/media/Hair_spa.9e8a12fd2b54a00b3b36.png",
+    "static/media/hair.png": "/static/media/hair.9e8a12fd2b54a00b3b36.png",
+    "static/media/makeup.png": "/static/media/makeup.ab698695eaa08eda3f09.png",
+    "static/media/facial.png": "/static/media/facial.c7e6a0afa127d5d2ceac.png",
+    "static/media/Haircut.png": "/static/media/Haircut.5b01f347611f37b1251e.png",
+    "static/media/manicure.png": "/static/media/manicure.451bd9dc57df000bd85e.png",
+    "static/media/waxing.png": "/static/media/waxing.98754aa125387d82e848.png",
+    "static/media/nail.png": "/static/media/nail.4065d64654285cfaeb32.png",
+    "static/media/mlogo.png": "/static/media/mlogo.c13d6e1398049b8b9280.png",
+    "index.html": "/index.html",
+    "main.802a9eba.css.map": "/static/css/main.802a9eba.css.map",
+    "main.bf820726.js.map": "/static/js/main.bf820726.js.map",
+    "453.cbb5907b.chunk.js.map": "/static/js/453.cbb5907b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.802a9eba.css",
+    "static/js/main.bf820726.js"
+  ]
+}

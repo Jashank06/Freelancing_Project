@@ -1,0 +1,47 @@
+# ==================
+# Node.js / Backend
+# ==================
+node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log*
+
+# Logs
+logs
+*.log
+*.out
+*.pid
+*.gz
+
+# Coverage
+coverage/
+*.lcov
+
+# Debug
+.vscode/
+.idea/
+.DS_Store
+
+# ==================
+# React / Frontend
+# ==================
+Frontend/node_modules/
+Frontend/.env
+Frontend/.DS_Store
+
+# Build output (do not commit build files)
+Frontend/build/
+Frontend/dist/
+
+# React editor/IDE files
+Frontend/.vscode/
+Frontend/.idea/
+
+# ==================
+# MacOS system files
+# ==================
+.DS_Store
+*.DS_Store
